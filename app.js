@@ -1,24 +1,24 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
 
-// 1. Add this middleware so Express can read the data coming from the HTML form
-app.use(express.urlencoded({ extended: true }));
+// Middleware to parse JSON bodies sent by Axios
+app.use(express.json()); 
 
-// GET endpoint to serve the HTML form
+// Serve the HTML form
 app.get('/api/products', (req, res) => {
-    res.sendFile(path.join(__dirname, 'VIEW', 'products.html'));
+    res.sendFile(path.join(__dirname, 'view', 'products.html'));
 });
 
-// 2. Add the POST endpoint to handle the form submission
+// Handle the POST request from Axios
 app.post('/api/products', (req, res) => {
-    // req.body.productName exactly matches the name="productName" in your HTML input
     const newProduct = req.body.productName;
-    console.log("New Product Received:", newProduct);
     
-    // Send a success message back to the browser
-    res.send(`<h1>Successfully added product: ${newProduct}</h1> <br> <a href="/api/products">Go Back</a>`);
+    // Console log the data on the server (Deliverable 4)
+    console.log("Product received on server:", newProduct);
+    
+    // Return the user-added product as a response (Deliverable 4)
+    res.send(`Successfully added product: ${newProduct}`);
 });
 
 // Start the server

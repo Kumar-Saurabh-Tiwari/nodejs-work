@@ -4,17 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
+    <!-- 1. Include Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <form action="/api/products" method="POST">
-        <!-- Label with text "Product Name" and for attribute "product" -->
+    <!-- 2. Remove action and method; we will handle it with JavaScript -->
+    <form id="productForm">
         <label for="product">Product Name</label>
-        
-        <!-- Input field with id "product" and name "productName" -->
-        <input type="text" id="product" name="productName">
-        
-        <!-- Submit button with content "Add Product" -->
+        <input type="text" id="product" name="productName" required>
         <button type="submit">Add Product</button>
     </form>
+
+    <!-- Div to show the server's response -->
+    <div id="responseMessage" style="margin-top: 20px; color: green;"></div>
+
+    <script>
+        // 3. Handle form submission with Axios
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent standard page reload
+
+            const productName = document.getElementById('product').value;
+
+            // Send POST request using Axios
+            axios.post('/api/products', {
+                productName: productName
+            })
+            .then(function (response) {
+                // Display the response from the server on the screen
+                document.getElementById('responseMessage').innerHTML = response.data;
+                document.getElementById('product').value = ''; // Clear input field
+            })
+            .catch(function (error) {
+                console.error("Error sending product:", error);
+            });
+        });
+    </script>
 </body>
 </html>
