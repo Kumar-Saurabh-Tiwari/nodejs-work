@@ -2,33 +2,23 @@ const express = require('express');
 
 const app = express();
 
-// 1. GET /products
-app.get('/products', (req, res) => {
-    res.send('Here is the list of all products.');
+// Set up a dynamic GET route with a route parameter (:username)
+app.get('/welcome/:username', (req, res) => {
+    // 1. Extract the route parameter
+    const username = req.params.username;
+    
+    // 2. Extract the query parameter
+    const role = req.query.role;
+    
+    // 3. Send the personalized response
+    if (role) {
+        res.send(`Welcome ${username}, your role is ${role}`);
+    } else {
+        res.send(`Welcome ${username}`);
+    }
 });
 
-// 2. POST /products
-app.post('/products', (req, res) => {
-    res.send('A new product has been added.');
-});
-
-// 3. GET /categories
-app.get('/categories', (req, res) => {
-    res.send('Here is the list of all categories.');
-});
-
-// 4. POST /categories
-app.post('/categories', (req, res) => {
-    res.send('A new category has been created.');
-});
-
-// 5. Wildcard Route for undefined endpoints (404 Page Not Found)
-// FIX: Removed the '*' to make it compatible with Express 5
-app.use((req, res) => {
-    res.status(404).send('<h1>404 - Page Not Found</h1>');
-});
-
-// Start the server and listen on port 4000
-app.listen(4000, () => {
-    console.log('Server is running on port 4000');
+// Start the server
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
 });
