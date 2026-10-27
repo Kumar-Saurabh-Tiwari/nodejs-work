@@ -2,13 +2,16 @@ const express = require('express');
 const app = express();
 
 // 1. Import the router file
-const shopRoutes = require('./shopRoutes');
+const bookRoutes = require('./bookRoutes');
 
-// 2. Use app.use() to connect the router
-// Note: We are adding a '/shop' prefix, so the routes will be /shop/products and /shop/add-product
-app.use('/shop', shopRoutes);
+// 2. Middleware to parse incoming request bodies (so req.body works in POST)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Catch-all 404 route for any undefined endpoints
+// 3. Connect the router
+app.use(bookRoutes);
+
+// Catch-all 404 route for undefined endpoints
 app.use((req, res) => {
     res.status(404).send('<h1>404 - Page Not Found</h1>');
 });
