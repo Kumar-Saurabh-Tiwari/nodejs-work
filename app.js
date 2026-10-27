@@ -1,25 +1,22 @@
 const express = require('express');
-const path = require('path');
 const app = express();
 
-// Middleware to parse JSON bodies sent by Axios
-app.use(express.json()); 
+// 1. Import route files
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
-// Serve the HTML form
-app.get('/api/products', (req, res) => {
-    res.sendFile(path.join(__dirname, 'view', 'products.html'));
-});
+// 2. Import the centralized error controller
+const errorController = require('./controllers/errorController');
 
-// Handle the POST request from Axios
-app.post('/api/products', (req, res) => {
-    const newProduct = req.body.productName;
-    
-    // Console log the data on the server (Deliverable 4)
-    console.log("Product received on server:", newProduct);
-    
-    // Return the user-added product as a response (Deliverable 4)
-    res.send(`Successfully added product: ${newProduct}`);
-});
+// Mount the routers
+app.use('/users', userRoutes);
+app.use('/products', productRoutes);
+app.use('/cart', cartRoutes);
+
+// 3. Centralized Error Handling (Catch-all for undefined routes)
+// This replaces the inline (req, res) => {...} function we used previously
+app.use(errorController.get404);
 
 // Start the server
 const PORT = 3000;
