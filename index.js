@@ -1,10 +1,23 @@
-const http = require('http');
+const express = require('express');
 
-// Make sure the spelling matches your file exactly (routes.js)
-const routes = require('./routes'); 
+const app = express();
 
-const server = http.createServer(routes);
+// 1. Create a Custom Middleware Function
+const addUserMiddleware = (req, res, next) => {
+    // Add a req.user property with a value of "Guest"
+    req.user = "Guest";
+    // Call next() to pass control to the next middleware/route handler
+    next(); 
+};
 
-server.listen(3000, () => {
-    console.log('Server is running on port 3000');
+// 2. Set Up Routing for the Middleware
+// Apply the middleware specifically to the '/welcome' route
+app.get('/welcome', addUserMiddleware, (req, res) => {
+    // Respond with an h1 heading that includes the req.user value
+    res.send(`<h1>Welcome, ${req.user}!</h1>`);
+});
+
+// Start the server
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
 });
