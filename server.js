@@ -23,7 +23,8 @@ app.post('/categories', (req, res) => {
 });
 
 // 5. Wildcard Route for undefined endpoints (404 Page Not Found)
-app.use('*', (req, res) => {
+// FIX: Removed the '*' to make it compatible with Express 5
+app.use((req, res) => {
     res.status(404).send('<h1>404 - Page Not Found</h1>');
 });
 
